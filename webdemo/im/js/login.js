@@ -78,12 +78,7 @@ var Login = {
         that.$errorMsg.html(errorMsg).removeClass('hide'); // 显示错误信息
         return false;
     },
-    //这里做了个伪登录方式（实际上是把accid，token带到下个页面连SDK在做鉴权）
-    //一般应用服务器的应用会有自己的登录接口
     requestLogin: function(account, pwd) {
-        //自己的appkey就不用加密了
-        // setCookie('sdktoken',pwd);
-
         let password;
         let uid;
 
@@ -95,13 +90,14 @@ var Login = {
                     var resultObject = eval('(' + result + ')');
                     if (resultObject.retStatus == 200) {
                         password = resultObject.respObject.token;
-                        uid = resultObject.respObject.uid;
+                        uid = resultObject.respObject.accid;
                     }
                 } catch (e) {
                     console.error(e);
                 }
             }
         };
+        //做一个简单的登录
         xhr.open("get", "http://localhost:8080/api/v2/yunxin/getToken?account=" + account, false);
         xhr.send(null);
         setCookie('sdktoken', password);
